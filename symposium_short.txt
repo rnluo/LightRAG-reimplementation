@@ -1,0 +1,372 @@
+﻿# This is part of a text copy of "Symposium" by Plato.
+#
+# Source: https://www.gutenberg.org/ebooks/1600.txt.utf-8
+# Original Publication Date: 1999
+# License: Public Domain
+
+The Project Gutenberg eBook of SYMPOSIUM
+
+
+SYMPOSIUM
+
+
+By Plato
+
+
+Translated by Benjamin Jowett
+
+
+PERSONS OF THE DIALOGUE: Apollodorus, who repeats to his companion
+the dialogue which he had heard from Aristodemus, and had already once
+narrated to Glaucon. Phaedrus, Pausanias, Eryximachus, Aristophanes,
+Agathon, Socrates, Alcibiades, A Troop of Revellers.
+
+SCENE: The House of Agathon.
+
+
+Concerning the things about which you ask to be informed I believe that
+I am not ill-prepared with an answer. For the day before yesterday I
+was coming from my own home at Phalerum to the city, and one of my
+acquaintance, who had caught a sight of me from behind, calling out
+playfully in the distance, said: Apollodorus, O thou Phalerian (Probably
+a play of words on (Greek), 'bald-headed.') man, halt! So I did as I
+was bid; and then he said, I was looking for you, Apollodorus, only just
+now, that I might ask you about the speeches in praise of love, which
+were delivered by Socrates, Alcibiades, and others, at Agathon's supper.
+Phoenix, the son of Philip, told another person who told me of them;
+his narrative was very indistinct, but he said that you knew, and I wish
+that you would give me an account of them. Who, if not you, should be
+the reporter of the words of your friend? And first tell me, he said,
+were you present at this meeting?
+
+Your informant, Glaucon, I said, must have been very indistinct indeed,
+if you imagine that the occasion was recent; or that I could have been
+of the party.
+
+Why, yes, he replied, I thought so.
+
+Impossible: I said. Are you ignorant that for many years Agathon has not
+resided at Athens; and not three have elapsed since I became acquainted
+with Socrates, and have made it my daily business to know all that he
+says and does. There was a time when I was running about the world,
+fancying myself to be well employed, but I was really a most wretched
+being, no better than you are now. I thought that I ought to do anything
+rather than be a philosopher.
+
+Well, he said, jesting apart, tell me when the meeting occurred.
+
+In our boyhood, I replied, when Agathon won the prize with his first
+tragedy, on the day after that on which he and his chorus offered the
+sacrifice of victory.
+
+Then it must have been a long while ago, he said; and who told you--did
+Socrates?
+
+No indeed, I replied, but the same person who told Phoenix;--he was a
+little fellow, who never wore any shoes, Aristodemus, of the deme of
+Cydathenaeum. He had been at Agathon's feast; and I think that in
+those days there was no one who was a more devoted admirer of Socrates.
+Moreover, I have asked Socrates about the truth of some parts of his
+narrative, and he confirmed them. Then, said Glaucon, let us have the
+tale over again; is not the road to Athens just made for conversation?
+And so we walked, and talked of the discourses on love; and therefore,
+as I said at first, I am not ill-prepared to comply with your request,
+and will have another rehearsal of them if you like. For to speak or to
+hear others speak of philosophy always gives me the greatest pleasure,
+to say nothing of the profit. But when I hear another strain, especially
+that of you rich men and traders, such conversation displeases me; and
+I pity you who are my companions, because you think that you are doing
+something when in reality you are doing nothing. And I dare say that
+you pity me in return, whom you regard as an unhappy creature, and very
+probably you are right. But I certainly know of you what you only think
+of me--there is the difference.
+
+COMPANION: I see, Apollodorus, that you are just the same--always
+speaking evil of yourself, and of others; and I do believe that you pity
+all mankind, with the exception of Socrates, yourself first of all, true
+in this to your old name, which, however deserved, I know not how you
+acquired, of Apollodorus the madman; for you are always raging against
+yourself and everybody but Socrates.
+
+APOLLODORUS: Yes, friend, and the reason why I am said to be mad, and
+out of my wits, is just because I have these notions of myself and you;
+no other evidence is required.
+
+COMPANION: No more of that, Apollodorus; but let me renew my request
+that you would repeat the conversation.
+
+APOLLODORUS: Well, the tale of love was on this wise:--But perhaps I had
+better begin at the beginning, and endeavour to give you the exact words
+of Aristodemus:
+
+He said that he met Socrates fresh from the bath and sandalled; and as
+the sight of the sandals was unusual, he asked him whither he was going
+that he had been converted into such a beau:--
+
+To a banquet at Agathon's, he replied, whose invitation to his sacrifice
+of victory I refused yesterday, fearing a crowd, but promising that I
+would come to-day instead; and so I have put on my finery, because he is
+such a fine man. What say you to going with me unasked?
+
+I will do as you bid me, I replied.
+
+Follow then, he said, and let us demolish the proverb:--
+
+'To the feasts of inferior men the good unbidden go;'
+
+instead of which our proverb will run:--
+
+'To the feasts of the good the good unbidden go;'
+
+and this alteration may be supported by the authority of Homer himself,
+who not only demolishes but literally outrages the proverb. For, after
+picturing Agamemnon as the most valiant of men, he makes Menelaus, who
+is but a fainthearted warrior, come unbidden (Iliad) to the banquet of
+Agamemnon, who is feasting and offering sacrifices, not the better to
+the worse, but the worse to the better.
+
+I rather fear, Socrates, said Aristodemus, lest this may still be my
+case; and that, like Menelaus in Homer, I shall be the inferior person,
+who
+
+'To the feasts of the wise unbidden goes.'
+
+But I shall say that I was bidden of you, and then you will have to make
+an excuse.
+
+'Two going together,'
+
+he replied, in Homeric fashion, one or other of them may invent an
+excuse by the way (Iliad).
+
+This was the style of their conversation as they went along. Socrates
+dropped behind in a fit of abstraction, and desired Aristodemus, who was
+waiting, to go on before him. When he reached the house of Agathon
+he found the doors wide open, and a comical thing happened. A servant
+coming out met him, and led him at once into the banqueting-hall in
+which the guests were reclining, for the banquet was about to begin.
+Welcome, Aristodemus, said Agathon, as soon as he appeared--you are just
+in time to sup with us; if you come on any other matter put it off, and
+make one of us, as I was looking for you yesterday and meant to have
+asked you, if I could have found you. But what have you done with
+Socrates?
+
+I turned round, but Socrates was nowhere to be seen; and I had to
+explain that he had been with me a moment before, and that I came by his
+invitation to the supper.
+
+You were quite right in coming, said Agathon; but where is he himself?
+
+He was behind me just now, as I entered, he said, and I cannot think
+what has become of him.
+
+Go and look for him, boy, said Agathon, and bring him in; and do you,
+Aristodemus, meanwhile take the place by Eryximachus.
+
+The servant then assisted him to wash, and he lay down, and presently
+another servant came in and reported that our friend Socrates had
+retired into the portico of the neighbouring house. 'There he is fixed,'
+said he, 'and when I call to him he will not stir.'
+
+How strange, said Agathon; then you must call him again, and keep
+calling him.
+
+Let him alone, said my informant; he has a way of stopping anywhere and
+losing himself without any reason. I believe that he will soon appear;
+do not therefore disturb him.
+
+Well, if you think so, I will leave him, said Agathon. And then, turning
+to the servants, he added, 'Let us have supper without waiting for him.
+Serve up whatever you please, for there is no one to give you orders;
+hitherto I have never left you to yourselves. But on this occasion
+imagine that you are our hosts, and that I and the company are your
+guests; treat us well, and then we shall commend you.' After this,
+supper was served, but still no Socrates; and during the meal Agathon
+several times expressed a wish to send for him, but Aristodemus
+objected; and at last when the feast was about half over--for the fit,
+as usual, was not of long duration--Socrates entered. Agathon, who was
+reclining alone at the end of the table, begged that he would take
+the place next to him; that 'I may touch you,' he said, 'and have the
+benefit of that wise thought which came into your mind in the portico,
+and is now in your possession; for I am certain that you would not have
+come away until you had found what you sought.'
+
+How I wish, said Socrates, taking his place as he was desired, that
+wisdom could be infused by touch, out of the fuller into the emptier
+man, as water runs through wool out of a fuller cup into an emptier one;
+if that were so, how greatly should I value the privilege of reclining
+at your side! For you would have filled me full with a stream of wisdom
+plenteous and fair; whereas my own is of a very mean and questionable
+sort, no better than a dream. But yours is bright and full of promise,
+and was manifested forth in all the splendour of youth the day before
+yesterday, in the presence of more than thirty thousand Hellenes.
+
+You are mocking, Socrates, said Agathon, and ere long you and I will
+have to determine who bears off the palm of wisdom--of this Dionysus
+shall be the judge; but at present you are better occupied with supper.
+
+Socrates took his place on the couch, and supped with the rest; and then
+libations were offered, and after a hymn had been sung to the god,
+and there had been the usual ceremonies, they were about to commence
+drinking, when Pausanias said, And now, my friends, how can we drink
+with least injury to ourselves? I can assure you that I feel severely
+the effect of yesterday's potations, and must have time to recover; and
+I suspect that most of you are in the same predicament, for you were
+of the party yesterday. Consider then: How can the drinking be made
+easiest?
+
+I entirely agree, said Aristophanes, that we should, by all means, avoid
+hard drinking, for I was myself one of those who were yesterday drowned
+in drink.
+
+I think that you are right, said Eryximachus, the son of Acumenus; but
+I should still like to hear one other person speak: Is Agathon able to
+drink hard?
+
+I am not equal to it, said Agathon.
+
+Then, said Eryximachus, the weak heads like myself, Aristodemus,
+Phaedrus, and others who never can drink, are fortunate in finding
+that the stronger ones are not in a drinking mood. (I do not include
+Socrates, who is able either to drink or to abstain, and will not mind,
+whichever we do.) Well, as of none of the company seem disposed to drink
+much, I may be forgiven for saying, as a physician, that drinking deep
+is a bad practice, which I never follow, if I can help, and certainly
+do not recommend to another, least of all to any one who still feels the
+effects of yesterday's carouse.
+
+I always do what you advise, and especially what you prescribe as a
+physician, rejoined Phaedrus the Myrrhinusian, and the rest of the
+company, if they are wise, will do the same.
+
+It was agreed that drinking was not to be the order of the day, but that
+they were all to drink only so much as they pleased.
+
+Then, said Eryximachus, as you are all agreed that drinking is to be
+voluntary, and that there is to be no compulsion, I move, in the next
+place, that the flute-girl, who has just made her appearance, be told
+to go away and play to herself, or, if she likes, to the women who are
+within (compare Prot.). To-day let us have conversation instead; and,
+if you will allow me, I will tell you what sort of conversation. This
+proposal having been accepted, Eryximachus proceeded as follows:--
+
+I will begin, he said, after the manner of Melanippe in Euripides,
+
+'Not mine the word'
+
+which I am about to speak, but that of Phaedrus. For often he says to me
+in an indignant tone:--'What a strange thing it is, Eryximachus, that,
+whereas other gods have poems and hymns made in their honour, the great
+and glorious god, Love, has no encomiast among all the poets who are
+so many. There are the worthy sophists too--the excellent Prodicus for
+example, who have descanted in prose on the virtues of Heracles and
+other heroes; and, what is still more extraordinary, I have met with a
+philosophical work in which the utility of salt has been made the theme
+of an eloquent discourse; and many other like things have had a like
+honour bestowed upon them. And only to think that there should have been
+an eager interest created about them, and yet that to this day no one
+has ever dared worthily to hymn Love's praises! So entirely has this
+great deity been neglected.' Now in this Phaedrus seems to me to be
+quite right, and therefore I want to offer him a contribution; also I
+think that at the present moment we who are here assembled cannot do
+better than honour the god Love. If you agree with me, there will be
+no lack of conversation; for I mean to propose that each of us in turn,
+going from left to right, shall make a speech in honour of Love. Let him
+give us the best which he can; and Phaedrus, because he is sitting first
+on the left hand, and because he is the father of the thought, shall
+begin.
+
+No one will vote against you, Eryximachus, said Socrates. How can I
+oppose your motion, who profess to understand nothing but matters of
+love; nor, I presume, will Agathon and Pausanias; and there can be
+no doubt of Aristophanes, whose whole concern is with Dionysus and
+Aphrodite; nor will any one disagree of those whom I see around me. The
+proposal, as I am aware, may seem rather hard upon us whose place is
+last; but we shall be contented if we hear some good speeches first. Let
+Phaedrus begin the praise of Love, and good luck to him. All the company
+expressed their assent, and desired him to do as Socrates bade him.
+
+Aristodemus did not recollect all that was said, nor do I recollect all
+that he related to me; but I will tell you what I thought most worthy of
+remembrance, and what the chief speakers said.
+
+Phaedrus began by affirming that Love is a mighty god, and wonderful
+among gods and men, but especially wonderful in his birth. For he is the
+eldest of the gods, which is an honour to him; and a proof of his claim
+to this honour is, that of his parents there is no memorial; neither
+poet nor prose-writer has ever affirmed that he had any. As Hesiod
+says:--
+
+'First Chaos came, and then broad-bosomed Earth, The everlasting seat of
+all that is, And Love.'
+
+In other words, after Chaos, the Earth and Love, these two, came into
+being. Also Parmenides sings of Generation:
+
+'First in the train of gods, he fashioned Love.'
+
+And Acusilaus agrees with Hesiod. Thus numerous are the witnesses who
+acknowledge Love to be the eldest of the gods. And not only is he the
+eldest, he is also the source of the greatest benefits to us. For I know
+not any greater blessing to a young man who is beginning life than a
+virtuous lover, or to the lover than a beloved youth. For the principle
+which ought to be the guide of men who would nobly live--that principle,
+I say, neither kindred, nor honour, nor wealth, nor any other motive is
+able to implant so well as love. Of what am I speaking? Of the sense of
+honour and dishonour, without which neither states nor individuals ever
+do any good or great work. And I say that a lover who is detected in
+doing any dishonourable act, or submitting through cowardice when
+any dishonour is done to him by another, will be more pained at being
+detected by his beloved than at being seen by his father, or by his
+companions, or by any one else. The beloved too, when he is found in
+any disgraceful situation, has the same feeling about his lover. And if
+there were only some way of contriving that a state or an army should be
+made up of lovers and their loves (compare Rep.), they would be the very
+best governors of their own city, abstaining from all dishonour, and
+emulating one another in honour; and when fighting at each other's side,
+although a mere handful, they would overcome the world. For what lover
+would not choose rather to be seen by all mankind than by his beloved,
+either when abandoning his post or throwing away his arms? He would be
+ready to die a thousand deaths rather than endure this. Or who would
+desert his beloved or fail him in the hour of danger? The veriest coward
+would become an inspired hero, equal to the bravest, at such a time;
+Love would inspire him. That courage which, as Homer says, the god
+breathes into the souls of some heroes, Love of his own nature infuses
+into the lover.
+
+Love will make men dare to die for their beloved--love alone; and women
+as well as men. Of this, Alcestis, the daughter of Pelias, is a monument
+to all Hellas; for she was willing to lay down her life on behalf of her
+husband, when no one else would, although he had a father and mother;
+but the tenderness of her love so far exceeded theirs, that she made
+them seem to be strangers in blood to their own son, and in name only
+related to him; and so noble did this action of hers appear to the gods,
+as well as to men, that among the many who have done virtuously she is
+one of the very few to whom, in admiration of her noble action, they
+have granted the privilege of returning alive to earth; such exceeding
+honour is paid by the gods to the devotion and virtue of love. But
+Orpheus, the son of Oeagrus, the harper, they sent empty away, and
+presented to him an apparition only of her whom he sought, but herself
+they would not give up, because he showed no spirit; he was only a
+harp-player, and did not dare like Alcestis to die for love, but was
+contriving how he might enter Hades alive; moreover, they afterwards
+caused him to suffer death at the hands of women, as the punishment
+of his cowardliness. Very different was the reward of the true love of
+Achilles towards his lover Patroclus--his lover and not his love (the
+notion that Patroclus was the beloved one is a foolish error into which
+Aeschylus has fallen, for Achilles was surely the fairer of the two,
+fairer also than all the other heroes; and, as Homer informs us, he was
+still beardless, and younger far). And greatly as the gods honour the
+virtue of love, still the return of love on the part of the beloved to
+the lover is more admired and valued and rewarded by them, for the lover
+is more divine; because he is inspired by God. Now Achilles was quite
+aware, for he had been told by his mother, that he might avoid death and
+return home, and live to a good old age, if he abstained from slaying
+Hector. Nevertheless he gave his life to revenge his friend, and dared
+to die, not only in his defence, but after he was dead. Wherefore the
+gods honoured him even above Alcestis, and sent him to the Islands of
+the Blest. These are my reasons for affirming that Love is the eldest
+and noblest and mightiest of the gods; and the chiefest author and giver
+of virtue in life, and of happiness after death.
+
+*** END OF THE PROJECT GUTENBERG EBOOK SYMPOSIUM ***
