@@ -1,3 +1,5 @@
+# Functions used in RAG retrieval and generation
+
 from langchain_openai import ChatOpenAI
 from langchain_core.documents import Document
 from collections import defaultdict
@@ -7,10 +9,7 @@ from prompt import *
 import json
 import json_repair
 
-def extract_query(
-    history: list,
-    llm: ChatOpenAI
-):  
+def get_query():
     print("Enter query mode (local/global).\nAny other input defaults to hybrid mode.")
     query_mode = input("Mode: ")
 
@@ -22,8 +21,16 @@ def extract_query(
 
     if query == "":
         query = "Compare and contrast the different theories about love mentioned in the text, illustrating how each of them helps conveying the main philosophical thought."
-    
-        
+
+    return query_mode, query
+
+def extract_query(
+    history: list,
+    llm: ChatOpenAI,
+    query_mode: str,
+    query: str
+):  
+            
     prompt_template = PROMPTS["keywords_extraction"]
     examples = PROMPTS["keywords_extraction_examples"]
     prompt = prompt_template.format(

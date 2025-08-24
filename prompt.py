@@ -1,6 +1,8 @@
-# This file is directly borrowed from:
+# The contents of this file is directly borrowed from:
 # Project: LightRAG 
-# Source: https://github.com/HKUDS/LightRAG/blob/main/lightrag/prompt.py
+# Sources: 
+#   https://github.com/HKUDS/LightRAG/blob/main/lightrag/prompt.py
+#   https://github.com/HKUDS/LightRAG/blob/main/reproduce/batch_eval.py
 # Author: HKUDS
 # License: MIT 
 
@@ -339,26 +341,48 @@ When handling content with timestamps:
 
 Response:"""
 
-# TODO: deprecated
-PROMPTS[
-    "similarity_check"
-] = """Please analyze the similarity between these two questions:
+PROMPTS["evaluation"] = """
+---Role---
+You are an expert tasked with evaluating two answers to the same question based on three criteria: **Comprehensiveness**, **Diversity**, and **Empowerment**.
+You will evaluate two answers to the same question based on three criteria: **Comprehensiveness**, **Diversity**, and **Empowerment**.
 
-Question 1: {original_prompt}
-Question 2: {cached_prompt}
+- **Comprehensiveness**: How much detail does the answer provide to cover all aspects and details of the question?
+- **Diversity**: How varied and rich is the answer in providing different perspectives and insights on the question?
+- **Empowerment**: How well does the answer help the reader understand and make informed judgments about the topic?
 
-Please evaluate whether these two questions are semantically similar, and whether the answer to Question 2 can be used to answer Question 1, provide a similarity score between 0 and 1 directly.
+For each criterion, choose the better answer (either Answer 1 or Answer 2) and explain why. Then, select an overall winner based on these three categories.
 
-Similarity score criteria:
-0: Completely unrelated or answer cannot be reused, including but not limited to:
-   - The questions have different topics
-   - The locations mentioned in the questions are different
-   - The times mentioned in the questions are different
-   - The specific individuals mentioned in the questions are different
-   - The specific events mentioned in the questions are different
-   - The background information in the questions is different
-   - The key conditions in the questions are different
-1: Identical and answer can be directly reused
-0.5: Partially related and answer needs modification to be used
-Return only a number between 0-1, without any additional content.
+Here is the question:
+{query}
+
+Here are the two answers:
+
+**Answer 1:**
+{answer1}
+
+**Answer 2:**
+{answer2}
+
+Evaluate both answers using the three criteria listed above and provide detailed explanations for each criterion.
+
+Output your evaluation in the following JSON format:
+
+{{
+    "Comprehensiveness": {{
+        "Winner": "[Answer 1 or Answer 2]",
+        "Explanation": "[Provide explanation here]"
+    }},
+    "Diversity": {{
+        "Winner": "[Answer 1 or Answer 2]",
+        "Explanation": "[Provide explanation here]"
+    }},
+    "Empowerment": {{
+        "Winner": "[Answer 1 or Answer 2]",
+        "Explanation": "[Provide explanation here]"
+    }},
+    "Overall Winner": {{
+        "Winner": "[Answer 1 or Answer 2]",
+        "Explanation": "[Summarize why this answer is the overall winner based on the three criteria]"
+    }}
+}}
 """

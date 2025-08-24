@@ -171,31 +171,33 @@ def _handle_single_relation_extraction(
 
 # Summarization and merging
 def _handle_entity_relation_summary(
-   entity_or_relation_names: list[str],
-   descriptions: list[str],
-   filename: str,
-   llm: ChatOpenAI
-   ):
-   prompts = []
-   prompt_template = PROMPTS["summarize_entity_descriptions"]
-   for entity_or_relation_name, description in zip(entity_or_relation_names, descriptions):
-      prompt = prompt_template.format(
-         entity_name=entity_or_relation_name,
-         description_list=description,
-         language=PROMPTS["DEFAULT_LANGUAGE"]
-      )
-      prompts.append(prompt)
+    entity_or_relation_names: list[str],
+    descriptions: list[str],
+    filename: str,
+    llm: ChatOpenAI
+    ):
+    prompts = []
+    prompt_template = PROMPTS["summarize_entity_descriptions"]
+    for entity_or_relation_name, description in zip(entity_or_relation_names, descriptions):
+        prompt = prompt_template.format(
+            entity_name=entity_or_relation_name,
+            description_list=description,
+            language=PROMPTS["DEFAULT_LANGUAGE"]
+        )
+        prompts.append(prompt)
 
-   cache_file = f"{filename} summaries_cache.pkl"
-
-   if os.path.exists(cache_file):
-      print("Loading summaries from cache...")
-      with open(cache_file, 'rb') as f:
-         summaries = pickle.load(f)
-   else:
-      print("Fetching summaries from LLM and caching...")
-      summaries = llm.batch(prompts)
-      with open(cache_file, 'wb') as f:
-         pickle.dump(summaries, f)
-         
-   return summaries
+    cache_file = f"{filename} summaries_cache.pkl"
+    
+    if filename:
+        if os.path.exists(cache_file):
+            print("Loading summaries from cache...")
+            with open(cache_file, 'rb') as f:
+                summaries = pickle.load(f)
+        else:
+            print("Fetching summaries from LLM and caching...")
+            summaries = llm.batch(prompts)
+            with open(cache_file, 'wb') as f:
+                pickle.dump(summaries, f)
+    else:
+        summaries = llm.batch(prompts) 
+    return summaries
