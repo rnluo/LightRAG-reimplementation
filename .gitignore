@@ -18,6 +18,8 @@ sdist/
 var/
 *.egg-info/
 .installed.cfg
+graph/
+rag_cache/
 *.egg
 
 # PyInstaller
