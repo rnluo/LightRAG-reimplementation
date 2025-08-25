@@ -4,15 +4,76 @@
 from dotenv import load_dotenv
 import os
 
-load_dotenv(".env")
+import asyncio
+import os
+import inspect
+import logging
+import logging.config
+from lightrag import LightRAG, QueryParam
+from lightrag.llm.ollama import ollama_model_complete, ollama_embed
+from lightrag.llm.openai import openai_complete
+from lightrag.utils import EmbeddingFunc, logger, set_verbose_debug
+from lightrag.kg.shared_storage import initialize_pipeline_status
 
+
+load_dotenv(".env")
 api_key = os.getenv("DEEPSEEK_API_KEY")
 
+# Call LightRAG from working directory
+async def initialize_rag():
+    rag = LightRAG(
+        working_dir=".",
+        llm_model_func=openai_complete,
+        llm_model_name=os.getenv("LLM_MODEL", "deepseek-chat"),
+        summary_max_tokens=8192,
+        llm_model_kwargs={
+            "base_url": os.getenv("LLM_BINDING_HOST", "https://api.deepseek.com/v1"),
+            "api_key": os.getenv("OPENAI_API_KEY"),
+            "timeout": int(os.getenv("TIMEOUT", "1800")),
+        },
+        embedding_func=EmbeddingFunc(
+            embedding_dim=int(os.getenv("EMBEDDING_DIM", "1024")),
+            max_token_size=int(os.getenv("MAX_EMBED_TOKENS", "8192")),
+            func=lambda texts: ollama_embed(
+                texts,
+                embed_model=os.getenv("OLLAMA_EMBED_MODEL", "bge-m3:567m"),
+                host=os.getenv("EMBEDDING_BINDING_HOST", "http://localhost:11434"),
+            ),
+        ),
+    )
 
+    await rag.initialize_storages()
+    await initialize_pipeline_status()
+
+    return rag
+
+async def lightrag(
+        input: str,
+        context: str,
+):
+    try:
+        rag = await initialize_rag()
+
+        await rag.ainsert(context)
+
+        answer_chunks = []
+        chunks = await rag.aquery(
+            input,
+            param=QueryParam(mode='hybrid', stream=True, enable_rerank=False),
+        )
+        async for chunk in chunks:
+            answer_chunks.append(chunk)
+        answer = "".join(answer_chunks)
+
+        return answer
+    
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+          
 from langchain_openai import ChatOpenAI
 
 from datasets import load_dataset
-import html
 import json
 import json_repair
 import jsonlines
@@ -22,68 +83,81 @@ from naive_rag import naive_rag
 from prompt import *
 import utils
 
-model_name1 = "naive_rag"
+#model_name1 = "naive_rag"
+#model_name2 = "simplified_lightrag"
+model_name1 = "lightrag"
 model_name2 = "simplified_lightrag"
-output_file_path = "evaluation_responses.json"
+output_file_path = "l_evaluation_responses.json"
+match_results_path = "l_evaluation_results.json"
 query_mode = ""
 
-llm = ChatOpenAI(
-    model="deepseek-chat",
-    api_key=api_key,
-    base_url="https://api.deepseek.com/v1"
-)
-
-dataset = load_dataset("json", data_files={"train": "mix.jsonl"})
-
-inputs = dataset["train"]["input"][:3]
-contexts = dataset["train"]["context"][:3]
-
-prompts = []
-for i, (input, context) in enumerate(zip(inputs, contexts)):
-    answer1 = naive_rag(input, context)
-    answer2 = simplified_lightrag(input, context, query_mode)
-    prompt_template = PROMPTS["evaluation"]
-    prompt = prompt_template.format(
-        query=input,
-        answer1=answer1,
-        answer2=answer2
+async def main():
+    llm = ChatOpenAI(
+        model="deepseek-chat",
+        api_key=api_key,
+        base_url="https://api.deepseek.com/v1"
     )
-    prompts.append(prompt)
-    print(f"{i}/{len(inputs)}")
+
+    dataset = load_dataset("json", data_files={"train": "mix.jsonl"})
+
+    inputs = dataset["train"]["input"][9:10]
+    contexts = dataset["train"]["context"][9:10]
+
+    prompts = []
+    for i, (input, context) in enumerate(zip(inputs, contexts)):
+        #answer1 = naive_rag(input, context)
+        answer1 = await lightrag(input, context)
+        print(answer1)
+        answer2 = simplified_lightrag(input, context, query_mode)
+        print(answer2.content) #
+        prompt_template = PROMPTS["evaluation"]
+        prompt = prompt_template.format(
+            query=input,
+            answer1=answer1,
+            answer2=answer2
+        )
+        prompts.append(prompt)
+        print(f"{i+1}/{len(inputs)}")
 
 
-responses = llm.batch(prompts)
+    responses = await llm.abatch(prompts)
 
-win_counts = {
-        'Comprehensiveness': {"Answer 1": 0, "Answer 2": 0},
-        'Diversity': {"Answer 1": 0, "Answer 2": 0},
-        'Empowerment': {"Answer 1": 0, "Answer 2": 0},
-        'Overall': {"Answer 1": 0, "Answer 2": 0}
-    }
+    win_counts = {
+            'Comprehensiveness': {"Answer 1": 0, "Answer 2": 0},
+            'Diversity': {"Answer 1": 0, "Answer 2": 0},
+            'Empowerment': {"Answer 1": 0, "Answer 2": 0},
+            'Overall': {"Answer 1": 0, "Answer 2": 0}
+        }
 
-total = 0
-for response in responses:
-    try:
-        data = json_repair.loads(response)
-        
-        win_counts['Comprehensiveness'][utils.clean_str(data['Comprehensiveness']['Winner'])] += 1
-        win_counts['Diversity'][utils.clean_str(data['Diversity']['Winner'])] += 1
-        win_counts['Empowerment'][utils.clean_str(data['Empowerment']['Winner'])] += 1
-        win_counts['Overall'][utils.clean_str(data['Overall Winner']['Winner'])] += 1
-        count += 1
+    total = 0
+    for response in responses:
+        try:
+            data = json_repair.loads(response.content)
+            
+            win_counts['Comprehensiveness'][utils.clean_str(data['Comprehensiveness']['Winner'])] += 1
+            win_counts['Diversity'][utils.clean_str(data['Diversity']['Winner'])] += 1
+            win_counts['Empowerment'][utils.clean_str(data['Empowerment']['Winner'])] += 1
+            win_counts['Overall'][utils.clean_str(data['Overall Winner']['Winner'])] += 1
+            total += 1
 
-        with jsonlines.open(output_file_path, mode="w") as writer:
-            writer.write(response)
-        
-    except (json.JSONDecodeError, KeyError) as e:
-        print(f"JSON parsing error: {e}")
-        print(f"LLM response: {response}")
+            with jsonlines.open(output_file_path, mode="a") as writer:
+                writer.write(f"{response.content}\n")
+            
+        except (json.JSONDecodeError, KeyError) as e:
+            print(f"JSON parsing error: {e}")
+            print(f"LLM response: {response}")
 
-for category, counts in win_counts.items():
-    print(win_counts[category])
-    win_rates = {}
-    win_rates[category] = {
-        model_name1: f"{(counts["Answer 1"] / total) * 100:.1f}%",
-        model_name2: f"{(counts["Answer 2"] / total) * 100:.1f}%"
-    }
-    print(f"{category}: {win_rates[category]}")
+    for category, counts in win_counts.items():
+        print(win_counts[category])
+        win_rates = {}
+        win_rates[category] = {
+            model_name1: f"{(counts["Answer 1"] / total) * 100:.1f}%",
+            model_name2: f"{(counts["Answer 2"] / total) * 100:.1f}%"
+        }
+        print(f"{category}: {win_rates[category]}")
+
+        with jsonlines.open(match_results_path, mode="w") as writer:
+                writer.write(f"{win_rates}\n")
+
+if __name__ == "__main__":
+    asyncio.run(main())

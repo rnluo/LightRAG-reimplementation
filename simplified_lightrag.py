@@ -308,10 +308,11 @@ def simplified_lightrag(
 
     context_str = rag.build_context(retrieved_entities_and_relations, [Document(chunk) for chunk in chunks])
 
+    history = {"role": "user", "content": query}
     # Final query
     prompt_template = PROMPTS["rag_response"]
     final_query = prompt_template.format(
-        history="",
+        history=history,
         context_data=context_str,
         response_type="",
         user_prompt=""
