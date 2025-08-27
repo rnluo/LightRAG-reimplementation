@@ -1,25 +1,33 @@
-# Evaluation by comparing two models
+# Evaluation by comparing two models with another llm
 # Dataset: Mix from UltraDomain
 # https://huggingface.co/datasets/TommyChien/UltraDomain/resolve/main/mix.jsonl?download=true
 from dotenv import load_dotenv
 import os
 
-import asyncio
-import os
-import inspect
-import logging
-import logging.config
-from lightrag import LightRAG, QueryParam
-from lightrag.llm.ollama import ollama_model_complete, ollama_embed
-from lightrag.llm.openai import openai_complete
-from lightrag.utils import EmbeddingFunc, logger, set_verbose_debug
-from lightrag.kg.shared_storage import initialize_pipeline_status
-
-
 load_dotenv(".env")
 api_key = os.getenv("DEEPSEEK_API_KEY")
 
-# Call LightRAG from working directory
+import asyncio
+import json
+import json_repair
+import jsonlines
+
+from lightrag import LightRAG, QueryParam
+from lightrag.llm.ollama import ollama_embed
+from lightrag.llm.openai import openai_complete
+from lightrag.utils import EmbeddingFunc
+from lightrag.kg.shared_storage import initialize_pipeline_status
+
+from datasets import load_dataset
+from langchain_openai import ChatOpenAI
+
+from simplified_lightrag import simplified_lightrag
+from naive_rag import naive_rag
+from prompt import *
+import utils
+
+
+# Initialize LightRAG from the working directory
 async def initialize_rag():
     rag = LightRAG(
         working_dir=".",
@@ -47,49 +55,39 @@ async def initialize_rag():
 
     return rag
 
+# Call LightRAG for generation
 async def lightrag(
         input: str,
         context: str,
+        rag: LightRAG
 ):
-    try:
+    if rag is None:
         rag = await initialize_rag()
 
-        await rag.ainsert(context)
+    await rag.ainsert(context)
 
-        answer_chunks = []
-        chunks = await rag.aquery(
-            input,
-            param=QueryParam(mode='hybrid', stream=True, enable_rerank=False),
-        )
-        async for chunk in chunks:
-            answer_chunks.append(chunk)
-        answer = "".join(answer_chunks)
+    answer_chunks = []
+    chunks = await rag.aquery(
+        input,
+        param=QueryParam(mode='hybrid', stream=True, enable_rerank=False),
+    )
+    async for chunk in chunks:
+        answer_chunks.append(chunk)
+    answer = "".join(answer_chunks)
 
-        return answer
-    
-    except Exception as e:
-        print(f"An error occurred: {e}")
+    return answer
 
-          
-from langchain_openai import ChatOpenAI
-
-from datasets import load_dataset
-import json
-import json_repair
-import jsonlines
-
-from simplified_lightrag import simplified_lightrag
-from naive_rag import naive_rag
-from prompt import *
-import utils
-
-#model_name1 = "naive_rag"
-#model_name2 = "simplified_lightrag"
-model_name1 = "lightrag"
+# Set model name in output
+model_name1 = "naive_rag"
+#model_name1 = "lightrag"
 model_name2 = "simplified_lightrag"
-output_file_path = "l_evaluation_responses.json"
-match_results_path = "l_evaluation_results.json"
-query_mode = ""
+
+# Set output path
+output_file_path = "evaluation_responses.json"
+match_results_path = "evaluation_results.json"
+query_mode = "hybrid"
+
+rag = None
 
 async def main():
     llm = ChatOpenAI(
@@ -97,38 +95,37 @@ async def main():
         api_key=api_key,
         base_url="https://api.deepseek.com/v1"
     )
-
+        
+    # Load dataset from the working directory
     dataset = load_dataset("json", data_files={"train": "mix.jsonl"})
+    inputs = dataset["train"]["input"][:50]
+    contexts = dataset["train"]["context"][:50]
 
-    inputs = dataset["train"]["input"][9:10]
-    contexts = dataset["train"]["context"][9:10]
-
+    # Generate prompts
     prompts = []
     for i, (input, context) in enumerate(zip(inputs, contexts)):
-        #answer1 = naive_rag(input, context)
-        answer1 = await lightrag(input, context)
-        print(answer1)
+        answer1 = naive_rag(input, context)
+        #answer1 = await lightrag(input, context, rag)
+        print(f"{i+1}/{len(inputs)}")
         answer2 = simplified_lightrag(input, context, query_mode)
-        print(answer2.content) #
+        print(f"{i+1}/{len(inputs)}")
         prompt_template = PROMPTS["evaluation"]
         prompt = prompt_template.format(
             query=input,
             answer1=answer1,
             answer2=answer2
         )
-        prompts.append(prompt)
-        print(f"{i+1}/{len(inputs)}")
 
-
+    # Generate llm evaluations
     responses = await llm.abatch(prompts)
 
+    # Parse and record llm evaluations
     win_counts = {
             'Comprehensiveness': {"Answer 1": 0, "Answer 2": 0},
             'Diversity': {"Answer 1": 0, "Answer 2": 0},
             'Empowerment': {"Answer 1": 0, "Answer 2": 0},
             'Overall': {"Answer 1": 0, "Answer 2": 0}
         }
-
     total = 0
     for response in responses:
         try:
@@ -147,6 +144,7 @@ async def main():
             print(f"JSON parsing error: {e}")
             print(f"LLM response: {response}")
 
+    # Display and save the results
     for category, counts in win_counts.items():
         print(win_counts[category])
         win_rates = {}
@@ -156,8 +154,8 @@ async def main():
         }
         print(f"{category}: {win_rates[category]}")
 
-        with jsonlines.open(match_results_path, mode="w") as writer:
-                writer.write(f"{win_rates}\n")
+        with jsonlines.open(match_results_path, mode="a") as writer:
+                writer.write(f"{win_rates[category]}\n")
 
 if __name__ == "__main__":
     asyncio.run(main())

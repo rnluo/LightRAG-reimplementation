@@ -2,7 +2,7 @@
 # This implementation provides a minimal working version of the LightRAG architecture as described in the original paper: 
 # "LightRAG: Simple and Fast Retrieval-Augmented Generation" by Guo et al. https://arxiv.org/abs/2410.05779
 # 
-# This Python version process queries in batch for evaluation.
+# This Python version process queries in batch to facilitate evaluation on a given dataset.
 # Another version (./simlified_lightrag.ipynb) receives user queries sequentially.
 
 from dotenv import load_dotenv
@@ -230,8 +230,6 @@ def simplified_lightrag(
     for name_tuple, data in graph_nodes.items():
         summary = summaries[summary_index].content
         canonical = data["canonical"]
-
-        node_id = str(uuid.uuid4())
 
         # Add node to graph
         G.add_node(

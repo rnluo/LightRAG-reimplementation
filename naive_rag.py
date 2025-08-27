@@ -1,4 +1,4 @@
-# Implementation of naive RAG architecture as a comparison
+# Implementation of naive RAG architecture as baseline
 
 from dotenv import load_dotenv
 import os

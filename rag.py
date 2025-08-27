@@ -1,4 +1,8 @@
-# Functions used in RAG retrieval and generation
+# The file contains contents borrowed from:
+# Project: LightRAG 
+# Source: https://github.com/HKUDS/LightRAG/blob/main/lightrag/operate.py
+# Author: HKUDS
+# License: MIT
 
 from langchain_openai import ChatOpenAI
 from langchain_core.documents import Document
@@ -140,7 +144,6 @@ def dual_level_retrieval(
 
     return [local_entities, local_relations, global_entities, global_relations]
 
-# adapted from https://github.com/HKUDS/LightRAG/blob/main/lightrag/operate.py
 def build_context(
     retrieved_entities_and_relations: list[list[dict]],
     chunks: list[Document]
