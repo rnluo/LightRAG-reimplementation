@@ -1,0 +1,273 @@
+% This template is adapted from the CS224N Spring 2024 Project Milestone Template 
+% https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1246/project/project-milestone-instructions-spr2024.pdf
+
+\documentclass{article}
+
+\usepackage[final]{neurips_2019}
+\setcitestyle{numbers}  % Force numerical citations
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{nicefrac}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{lipsum}
+\usepackage{booktabs}
+
+\newcommand{\note}[1]{\textcolor{blue}{{#1}}}
+
+\title{
+  Simplified Reimplementation of LightRAG \\
+  \vspace{1em}
+  \small{\normalfont A reimplementation report} 
+}
+
+\author{
+  Ruining Luo \\
+  School of Computing and Data Science \\
+  The University of Hong Kong\\
+  \texttt{ning.l.rn@connect.hku.hk} \\
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+  This project consists of completing a minimalistic reimplementation of the LightRAG architecture\cite{guo2024lightrag}.
+  The project is conducted as a hands-on exercise to demonstrate a practical understanding of the model's core ideas.
+  We successfully replicate some results of the original paper on a smaller scale,
+  confirming our comprehension of the underlying principles.\\
+  \textit{This report is formatted as a simplified conference paper to document the methodology and results of an independent study.}
+\end{abstract}
+
+\section{Approach}
+  This section demonstrates how we reimplement the components of the LightRAG architecture with simpler counterparts.
+
+  \subsection{Graph-based Text Indexing}
+    The model split documents into smaller chunks and utilize LLMs to extract entities and relations.
+    
+    \paragraph{Extracting entities and relationships.}
+        The model format extraction prompts for each chunk,
+        and send them to LLM in a batch.
+        The responses are parsed to obtain various data, 
+        including \verb|entity_name|, \verb|source|, \verb|target|, \verb|descriptions|, and \verb|chunk_ids|, etc.
+        These are stored in a dictionary for nodes or another dictionary for edges.
+        While the nodes dictionary directly uses the entity name as key,
+        the edges dictionary uses a \verb|(source, target)| tuple.
+        This allows extracted \verb|descriptions| and \verb|chunk_ids| with same keys to be stored together for later merging.
+
+    \paragraph{Deduplication to optimize graph operations.}
+        The step is essentially merging entities with similar names.
+        We employ a Chroma vector database to store all entity names.
+        Entities whose names are clustered by similarity search with relevance scores 
+        (In the experiments, $k=5$, \verb|similarity_threshold| $=0.7$)
+        are merged together, collecting the \verb|descriptions| and \verb|chunk_ids| of merged entities.
+        Relations are reconnected among the merged entities,
+        also with the \verb|descriptions| and \verb|chunk_ids| collected together.
+        For every entity and relation, the list \verb|descriptions| is passed to LLMs and replaced by a single summary.
+
+    \paragraph{LLM profiling for key-value pair generation; Incremental knowledge base.}
+        These parts are mainly ablated as our model employs a more basic approach, 
+        focusing on core functionality.
+        It does not generate summarization snippets but 
+        preserves \verb|chunk_ids| to directly access original chunks during retrieval.
+    
+    The entities and relations are stored into a NetworkX \verb|DiGraph|.
+    They are also stored into two FAISS vector databases with LLM summaries as keys.
+        
+  \subsection{Dual-level Retrieval Paradigm}
+
+    \paragraph{Query keyword extraction.}
+        For a given query, the algorithm calls LLMs to extract both low-level and high-level keywords,
+        corresponding to low-level and high-level retrieval.
+
+    \paragraph{Keyword matching.}
+        The keywords are matched against embeddings of LLM summaries with similarity search in the FAISS vector databases.
+        While the low-level keywords are used to search for entities (\verb|local_entities|),
+        the high-level keywords target relations (\verb|global_relations|).
+
+    \paragraph{Incorporating high-order relatedness.}
+        With methods provided by NetworkX,
+        the algorithm fetches the edges of \verb|local_entities| as \verb|local_relations|,
+        and gathers the vertices of \verb|global_relations| as \verb|global_entities|.
+  
+  \subsection{Retrieval-augmented Answer Generation}
+
+    \paragraph{Utilization of retrieved information.}
+        The four lists of retrieved elements are used to build context for the final generation.
+        The context consists of the names and structural information of the elements,
+        the LLM-summarized descriptions,
+        and the original text chunks retrieved with the \verb|chunk_ids| of the elements.
+
+    \paragraph{Context integration and answer genetation.}
+        We construct the final query by integrating the context with the entire conversation history and user query (integrated in conversation history).
+        This comprehensive input empowers the LLM to produce specific and detailed factual responses.
+
+
+
+\section{Experiments}
+  \subsection{Baselines}
+    Similar to the original paper, we implemented Naive RAG as a baseline\cite{gao2023precise}.
+    We also compared our model against the original LightRAG.
+
+  \subsection{Datasets}
+    Following the original paper, 
+    we also use datasets from the UltraDomain benchmark\cite{qian2024memorag}. 
+    Due to computational and financial constraints,
+    we limited our evaluation to the first 50 entries of its 'Mixed' domain.
+
+  \subsection{Evaluation Method}
+    Following the original paper,
+    two answers by two models are evaluated and compared by a third model in four dimensions,
+    including comprehensiveness, diversity, empowerment, and overall performance.
+
+  \subsection{Experimental Details}
+    We use DeepSeek-Chat for all our LLM-based operations,
+    and a local Ollama BGE-M3:567m as the embedding model.
+    All prompt templates are directly borrowed from the code of LightRAG.
+    In all experiments, our model and LightRAG are in the query mode \verb|hybrid|.
+
+  \subsection{Results}
+    Table 1 shows the win rates of our model v.s. Naive RAG and our model v.s. LightRAG on the first 50 entries of the Mixed dataset\ref{tab:results}.
+    \begin{table}[ht]
+        \centering
+        \caption{Win rates (\%) of our model v.s. Naive RAG and Light RAG across four evaluation dimensions.}
+        \label{tab:results}
+        \begin{tabular}{l|cc|cc}
+        \toprule
+        & Naive RAG & \textbf{Simplified LightRAG} & LightRAG & \textbf{Simplified LightRAG}\\
+        \midrule
+            Comprehensiveness & 46.0\% & \textbf{54.0}\% & 30.0\% & \textbf{70.0}\%\\
+            Diversity  &        46.0\% & \textbf{54.0}\% & 28.0\% & \textbf{72.0}\%\\
+            Empowerment &       18.0\% & \textbf{82.0}\% & 28.0\% & \textbf{72.0}\%\\
+            Overall &           34.0\% & \textbf{66.0}\% & 30.0\% & \textbf{70.0}\%\\
+        \bottomrule
+        \end{tabular}
+    \end{table}
+
+    \begin{table}[t]
+    \centering
+    \caption{Case Study: Comparison between Simpllified LightRAG and LightRAG.}
+    \vspace{-0.08in}
+    \label{tab:case}
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{|l|p{15cm}|}
+    \hline
+    \textbf{Query} & How does the system handle the complexity of propaganda techniques in the FLC task? \\
+    \hline
+    \textbf{LightRAG} & 
+    The system handles the complexity of propaganda techniques in the Fragment-Level 
+    Classification (FLC) task through a multi-faceted approach that combines 
+    specialized neural architectures, multi-task learning, and ensemble methods. 
+    The FLC task involves detecting both the specific spans of text containing 
+    propaganda and identifying which of the 18 possible propaganda techniques is 
+    being used, making it a complex token-level multi-label classification problem. \newline
+    The core architecture for FLC is based on LSTM-CRF (Long Short-Term Memory with 
+    Conditional Random Fields), which serves as a neural sequence tagger. This model 
+    incorporates word embeddings, character embeddings, and token-level features such
+    as polarity, part-of-speech tags, and named entity recognition tags to capture 
+    linguistic patterns associated with different propaganda techniques [KG] LSTM-CRF. \newline
+    To enhance performance, the system employs multi-grain and multi-task learning 
+    approaches. The multi-grain architecture jointly performs FLC with Sentence-Level 
+    Classification (SLC), adding binary sentence classification loss to the sequence 
+    tagging task. The multi-task approach simultaneously handles propagandistic 
+    span/fragment detection (PFD) alongside the 19-way classification of FLC, 
+    allowing the model to learn complementary representations [KG] Multi-grain 
+    LSTM-CRF. The system also utilizes ensemble methods, combining predictions from multiple 
+    configurations of the sequence taggers (specifically configurations II and IV 
+    from the development folds). This ensemble approach helps improve recall and 
+    overall F1 score by considering propagandistic fragments from each sequence 
+    tagger and performing majority voting at the fragment level for overlapping 
+    spans [DC] unknown\_source. \newline
+    Through these sophisticated architectural choices
+    and learning strategies, the MIC-CIS system achieved 3rd place out of 12 
+    participants in the FLC task, demonstrating its effectiveness in handling the 
+    complexity of multiple propaganda techniques at the fragment level [KG] MIC-CIS - FLC. \newline
+    \textbf{References}[\dots] \\ \hline
+    \textbf{Simplified LightRAG} & 
+    Based on the provided knowledge base, the MIC-CIS system handles the complexity 
+    of propaganda techniques in the Fragment-Level Classification (FLC) task through 
+    several sophisticated approaches: \newline
+    \textbf{System Architecture for FLC Complexity} \newline
+    \textbf{Multi-Modal Sequence Tagging}: The system employs LSTM-CRF neural architectures 
+    with three distinct operational modes: \newline
+    - Basic LSTM-CRF with word embeddings, character embeddings, and token-level features (polarity, POS, NER tags) \newline
+    - Multi-grain approach that jointly performs FLC and sentence-level classification \newline
+    - Multi-task setup combining propagandistic fragment detection (PFD) with FLC \newline
+    \textbf{Feature Integration}: The system incorporates comprehensive linguistic 
+    features including: \newline
+    - Polarity analysis \newline
+    - Part-of-speech (POS) tags \newline
+    - Named entity recognition (NER) tags \newline
+    - These features help identify specific propaganda techniques that involve emotional implications,
+    exaggeration, minimization, and other rhetorical devices \newline
+    \textbf{Ensemble Strategy}: For optimal performance, the system builds an ensemble by: \newline
+    - Considering propagandistic fragments from multiple sequence taggers \newline 
+    - Performing majority voting at the fragment level for exactly overlapping spans \newline
+    - Considering all non-overlapping fragments \newline
+    - Selecting the largest span when overlaps occur with the same label \newline
+    \textbf{Performance Results}: The MIC-CIS system achieved 3rd place ranking (out of 12 participants) in the FLC task, 
+    demonstrating effective handling of the 18 different propaganda techniques through these complex architectural approaches.
+    \textbf{References:}[\dots] \\ \hline
+    \textbf{LLM Decision} & 
+    \textbf{"Comprehensiveness"}: "Winner": "Answer 2", \newline
+    "Explanation": "Answer 2 provides a more comprehensive breakdown of the system's approach by detailing specific operational modes 
+    (three distinct LSTM-CRF configurations), explicitly listing all integrated linguistic features (polarity, POS, NER tags), 
+    and explaining how these features specifically help identify different propaganda techniques."
+    It also offers more detailed information about the ensemble strategy's decision-making process for overlapping spans. \newline
+    \textbf{"Diversity"}: "Winner": "Answer 2", \newline
+    "Explanation": "Answer 2 demonstrates greater diversity by presenting the information in a more structured, 
+    multi-faceted format with clear section headings. It provides richer insights into how different linguistic 
+    features specifically address various propaganda techniques (emotional implications, exaggeration, minimization), 
+    and offers more varied perspectives on the ensemble strategy's decision logic for different overlap scenarios." \newline
+    \textbf{"Empowerment"}: "Winner": "Answer 2", \newline
+    "Explanation": "Answer 2 better empowers the reader by organizing information in a more accessible format with clear section 
+    headers, explaining the practical implications of each technical choice (how features help identify specific techniques), 
+    and providing more detailed decision-making logic for the ensemble approach. This structure and explanation style make it 
+    easier for readers to understand the system's capabilities and limitations." \newline
+    \textbf{"Overall Winner"}: "Winner": "Answer 2", \newline
+    "Explanation": "Answer 2 is the clear overall winner as it excels across all three criteria. It provides more comprehensive 
+    technical details, presents information in a more diverse and structured manner with better organization, and offers superior 
+    empowerment through clearer explanations of how each system component addresses the complexity of propaganda detection. 
+    The structured format and detailed feature explanations make it more informative and accessible to readers seeking to 
+    understand the system's approach." \\ \hline
+    \end{tabular}
+    }
+    \vspace{-0.2in}
+    \end{table}
+
+    \newpage
+
+\section{Analysis}
+    Our model outperforms Naive RAG as expected, with an overall win rate of 66.0\%. 
+    This performance is similar to LightRAG's reported win rate of 60.0\%. 
+    Surprisingly, when compared against LightRAG,
+    our model achieves higher win rates on each of the four individual dimensions.
+    To better understand this result, we examined a specific case\ref{tab:case}.\\
+
+    The LLM's decision reveals a key trade-off.
+    While LightRAG provides natural language-like passages, 
+    our model's performance benefits significantly from the LLM's default highly structured output. 
+    This structured approach, however, diverges from generating natural and fluent responses, 
+    a core objective of RAG systems.
+    This greatly limits its applicability for general-purpose use cases.
+    In addition, the LightRAG output contains inline citations for easy reference,
+    which is advantageous over our model.\\
+
+    These discrepancies reveal that the evaluation method of using a third model as a judge is inconsistent 
+    with the objectives of the current experiment. 
+    To address this, future work could modify the evaluation prompt to place greater emphasis on evaluating eloquence and naturalness. 
+    Alternatively, the Simplified LightRAG framework could be reconstructed to output natural language passages 
+    rather than structured, LLM-like text, thus enabling a fairer comparison.
+
+\bibliographystyle{unsrt}
+\bibliography{references}
+
+\end{document}
